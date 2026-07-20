@@ -1,0 +1,17 @@
+project:
+  name: Digital Pathology Copilot
+
+dataset:
+  image_size: 96
+
+  batch_size: 32
+
+  num_workers: 4
+
+training:
+  epochs: 20
+
+  learning_rate: 0.001
+
+model:
+  backbone: resnet18
