@@ -1,10 +1,22 @@
 # Python
 __pycache__/
 *.pyc
+*.egg-info/
+build/
+dist/
+
+# IDE
+.vscode/
+.idea/
 
 # Environment
 .env
 .venv/
+myenv/
+
+# OS
+.DS_Store
+Thumbs.db
 
 # Logs
 logs/
