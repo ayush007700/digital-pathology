@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+.env
+.venv/
+
+# Logs
+logs/
+
+# Notebook
+.ipynb_checkpoints/
+
+# Data
+data/raw/
+data/processed/
+data/subset/
+
+# MLflow
+mlruns/
+
+# DVC
+.dvc/cache/
+
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
