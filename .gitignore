@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 
 # Environment
+myenv/
 .env
 .venv/
 
