@@ -1,45 +1,52 @@
+# Deep Learning
 torch
 torchvision
 torchaudio
 
-opencv-python
+# Medical AI
+monai
 
+# Medical image processing
+opencv-python
+Pillow
+h5py
+
+# Scientific Computing
 numpy
 pandas
+scikit-learn
 matplotlib
 
-scikit-learn
-
+# Data Augmentation
 albumentations
 
+# Progress
 tqdm
 
-jupyter
-
-Pillow
-
+# Config
 pyyaml
-
 python-dotenv
 
+# Experiment Tracking
 mlflow
 
+# Dataset Versioning
 dvc
 
+# Backend
 fastapi
-
 uvicorn
-
 pydantic
-
 sqlalchemy
 
+# Testing
 pytest
 
+# Formatting
 black
-
 isort
-
 flake8
 
-pre-commit
+# Notebook
+jupyter
+ipykernel
