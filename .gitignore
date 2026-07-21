@@ -13,7 +13,6 @@ dist/
 myenv/
 .env
 .venv/
-myenv/
 
 # OS
 .DS_Store
