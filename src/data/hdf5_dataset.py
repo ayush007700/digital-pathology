@@ -8,13 +8,12 @@ from pathlib import Path
 from typing import Callable, Optional
 
 import h5py
-import torch
 from torch.utils.data import Dataset
 
 
 class HDF5Dataset(Dataset):
     """
-    Generic dataset for loading HDF5 images and labels.
+    Generic HDF5 Dataset with lazy file loading.
     """
 
     def __init__(
@@ -35,13 +34,12 @@ class HDF5Dataset(Dataset):
 
         self.transform = transform
 
-        self.image_file = h5py.File(self.image_path, "r")
-        self.label_file = h5py.File(self.label_path, "r")
+        self.image_file = None
+        self.label_file = None
 
-        self.images = self.image_file[self.image_key]
-        self.labels = self.label_file[self.label_key]
-
-        self.total_samples = len(self.images)
+        # Read metadata only
+        with h5py.File(self.image_path, "r") as f:
+            self.total_samples = len(f[self.image_key])
 
         self.subset_size = (
             min(subset_size, self.total_samples)
@@ -49,11 +47,23 @@ class HDF5Dataset(Dataset):
             else self.total_samples
         )
 
+    def _initialize_files(self):
+
+        if self.image_file is None:
+            self.image_file = h5py.File(self.image_path, "r")
+            self.images = self.image_file[self.image_key]
+
+        if self.label_file is None:
+            self.label_file = h5py.File(self.label_path, "r")
+            self.labels = self.label_file[self.label_key]
+
     def __len__(self):
 
         return self.subset_size
 
     def __getitem__(self, idx):
+
+        self._initialize_files()
 
         image = self.images[idx]
 
@@ -66,8 +76,11 @@ class HDF5Dataset(Dataset):
 
     def close(self):
 
-        self.image_file.close()
-        self.label_file.close()
+        if self.image_file is not None:
+            self.image_file.close()
+
+        if self.label_file is not None:
+            self.label_file.close()
 
     def __del__(self):
 
