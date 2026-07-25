@@ -35,12 +35,34 @@ dataset:
 
 training:
   epochs: 10
+
   learning_rate: 0.001
-  seed: 42
+
+  optimizer: adam
+
+  scheduler: step
+
+  loss: cross_entropy
+
+  weight_decay: 0.0001
+
+  gradient_clip: 1.0
+
+  mixed_precision: true
+
+  save_best_only: true
+
+  early_stopping: true
+
+  patience: 5
 
 model:
   name: resnet18
   num_classes: 2
+
+scheduler:
+  step_size: 5
+  gamma: 0.1
 
 # project:
 #   name: Digital Pathology Copilot
