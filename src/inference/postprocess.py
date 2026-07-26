@@ -1,10 +1,3 @@
-"""
-Postprocessing
-
-Author: Ayush Raj
-"""
-
-
 class PostProcessor:
 
     CLASS_NAMES = {
@@ -14,12 +7,37 @@ class PostProcessor:
 
     def __call__(self, prediction):
 
-        pred = prediction["prediction"].item()
+        probs = prediction["probabilities"][0]
 
         return {
-            "class": self.CLASS_NAMES[pred],
-            "confidence": round(
-                prediction["confidence"].item() * 100,
-                2,
-            ),
+
+            "prediction":
+                self.CLASS_NAMES[
+                    prediction["prediction"].item()
+                ],
+
+            "confidence":
+                round(
+                    prediction["confidence"].item() * 100,
+                    2,
+                ),
+
+            "probabilities":{
+
+                "Normal":
+                    round(
+                        probs[0].item() * 100,
+                        2,
+                    ),
+
+                "Tumor":
+                    round(
+                        probs[1].item() * 100,
+                        2,
+                    )
+
+            },
+
+            "model":"ResNet18"
+
         }

@@ -10,12 +10,12 @@ import torch
 class Predictor:
 
     def __init__(
-        self,
-        model,
-        device,
-    ):
+            self,
+            model,
+            device,
+        ):
 
-        self.model = model.to(device)
+        self.model = model
         self.device = device
         self.model.eval()
 
