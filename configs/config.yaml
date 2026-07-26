@@ -10,17 +10,59 @@ paths:
 
 dataset:
   image_size: 96
-  batch_size: 32
-  num_workers: 4
+  batch_size: 4
+  num_workers: 0
+
+  pin_memory: false
+  persistent_workers: false
+  shuffle: false
+
+  root: data/raw
+
+  subset_size:
+    train: 500
+    valid: 100
+    test: 100
+
+  pcam:
+    train_images: pcam/training_split.h5
+    valid_images: pcam/validation_split.h5
+    test_images: pcam/test_split.h5
+
+    train_labels: Labels/Labels/camelyonpatch_level_2_split_train_y.h5
+    valid_labels: Labels/Labels/camelyonpatch_level_2_split_valid_y.h5
+    test_labels: Labels/Labels/camelyonpatch_level_2_split_test_y.h5
 
 training:
   epochs: 10
+
   learning_rate: 0.001
-  seed: 42
+
+  optimizer: adam
+
+  scheduler: step
+
+  loss: cross_entropy
+
+  weight_decay: 0.0001
+
+  gradient_clip: 1.0
+
+  mixed_precision: true
+
+  save_best_only: true
+
+  early_stopping: true
+
+  patience: 5
 
 model:
   name: resnet18
   num_classes: 2
+
+scheduler:
+  step_size: 5
+  gamma: 0.1
 
 # project:
 #   name: Digital Pathology Copilot

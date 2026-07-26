@@ -1,56 +1,50 @@
+"""
+PCam Dataset
+
+Author: Ayush Raj
+"""
+
 from pathlib import Path
+from typing import Optional, Callable
 
 from src.data.hdf5_dataset import HDF5Dataset
+from src.utils.config import config
 
 
 class PCamDataset(HDF5Dataset):
+    """
+    PatchCamelyon Dataset
+    """
 
     def __init__(
         self,
         split: str,
-        transform=None,
-        subset_size=None,
+        transform: Optional[Callable] = None,
+        subset_size: Optional[int] = None,
     ):
 
-        root = Path("data/raw")
+        root = Path(config.get("dataset", "root"))
 
         image_paths = {
-
-            "train": root / "pcam" / "training_split.h5",
-
-            "valid": root / "pcam" / "validation_split.h5",
-
-            "test": root / "pcam" / "test_split.h5",
-
+            "train": root / config.get("dataset", "pcam", "train_images"),
+            "valid": root / config.get("dataset", "pcam", "valid_images"),
+            "test": root / config.get("dataset", "pcam", "test_images"),
         }
 
         label_paths = {
-
-            "train": root
-            / "Labels"
-            / "Labels"
-            / "camelyonpatch_level_2_split_train_y.h5",
-
-            "valid": root
-            / "Labels"
-            / "Labels"
-            / "camelyonpatch_level_2_split_valid_y.h5",
-
-            "test": root
-            / "Labels"
-            / "Labels"
-            / "camelyonpatch_level_2_split_test_y.h5",
-
+            "train": root / config.get("dataset", "pcam", "train_labels"),
+            "valid": root / config.get("dataset", "pcam", "valid_labels"),
+            "test": root / config.get("dataset", "pcam", "test_labels"),
         }
 
+        if split not in image_paths:
+            raise ValueError(
+                f"Invalid split '{split}'. Choose from train, valid or test."
+            )
+
         super().__init__(
-
             image_path=image_paths[split],
-
             label_path=label_paths[split],
-
             transform=transform,
-
             subset_size=subset_size,
-
         )

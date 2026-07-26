@@ -14,6 +14,11 @@ myenv/
 .env
 .venv/
 
+# Ignore model checkpoints
+checkpoints/
+*.pth
+*.pt
+
 # OS
 .DS_Store
 Thumbs.db
