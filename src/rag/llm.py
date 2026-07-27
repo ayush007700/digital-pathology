@@ -10,8 +10,9 @@ from dotenv import load_dotenv
 
 from langchain_openai import ChatOpenAI
 
-load_dotenv()
+from src.rag.tools.tools import TOOLS
 
+load_dotenv()
 
 llm = ChatOpenAI(
 
@@ -20,3 +21,5 @@ llm = ChatOpenAI(
     temperature=0,
 
 )
+
+llm_with_tools = llm.bind_tools(TOOLS)

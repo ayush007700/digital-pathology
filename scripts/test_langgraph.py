@@ -1,17 +1,30 @@
 from src.rag.agents.graph import graph
 
-response = graph.invoke(
+questions = [
 
-    {
+    "What is breast cancer?",
 
-        "question":
+    "What is 125*32?",
 
-        "What are the pathological features of breast cancer?"
+    "Search PubMed for HER2 breast cancer.",
 
-    }
+]
+for q in questions:
 
-)
+    print("=" * 80)
 
-print()
+    print("QUESTION:", q)
 
-print(response["answer"])
+    result = graph.invoke(
+
+        {
+
+            "question": q,
+
+        }
+
+    )
+
+    print()
+
+    print(result["answer"])

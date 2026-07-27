@@ -1,23 +1,21 @@
+from src.rag.report.report_generator import ReportGenerator
+
+generator = ReportGenerator()
+
 def report_agent(state):
 
-    state["answer"] = f"""
+    filename = generator.generate(
 
-============================
+        prediction=state.get("prediction", "Unknown"),
 
-DIGITAL PATHOLOGY REPORT
+        confidence=state.get("confidence", 0),
 
-============================
+        llm_answer=state["answer"],
 
-Question:
+        model_name="ResNet18",
 
-{state["question"]}
+    )
 
---------------------------------
-
-Answer:
-
-{state["answer"]}
-
-"""
+    state["report_path"] = str(filename)
 
     return state

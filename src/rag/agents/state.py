@@ -12,3 +12,13 @@ class GraphState(TypedDict):
     context: str
 
     answer: str
+
+    next: str
+
+    prediction: str
+
+    confidence: float
+
+    report_path: str
+
+    tool_calls: list
