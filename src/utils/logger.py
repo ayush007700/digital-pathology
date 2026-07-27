@@ -6,30 +6,18 @@ from src.utils.config import config
 
 def get_logger(name):
 
-    Path("logs").mkdir(
-        exist_ok=True
-    )
+    Path("logs").mkdir(exist_ok=True)
 
     logger = logging.getLogger(name)
 
-    logger.setLevel(
-        config.config["logging"]["level"]
-    )
+    logger.setLevel(config.config["logging"]["level"])
 
     if logger.handlers:
         return logger
 
-    formatter = logging.Formatter(
+    formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(name)s | %(message)s")
 
-        "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
-
-    )
-
-    file_handler = logging.FileHandler(
-
-        config.config["logging"]["file"]
-
-    )
+    file_handler = logging.FileHandler(config.config["logging"]["file"])
 
     console_handler = logging.StreamHandler()
 

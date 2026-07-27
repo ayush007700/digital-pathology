@@ -1,4 +1,5 @@
 from pathlib import Path
+
 import yaml
 
 
@@ -22,16 +23,13 @@ class Config:
 
         return self.config["paths"][key]
 
-
     def get_model(self, key):
 
         return self.config["model"][key]
 
-
     def get_training(self, key):
 
         return self.config["training"][key]
-
 
     def get_deployment(self, key):
 

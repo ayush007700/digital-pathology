@@ -1,10 +1,6 @@
 from src.rag.retriever import retrieve
 
-docs = retrieve(
-
-    "What is breast cancer?"
-
-)
+docs = retrieve("What is breast cancer?")
 
 for d in docs:
 

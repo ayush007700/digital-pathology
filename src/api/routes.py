@@ -1,41 +1,26 @@
-from fastapi import APIRouter
-from fastapi import UploadFile
-from fastapi import File
-from fastapi import Request
-
-import tempfile
 import os
+import tempfile
 
-from src.inference.preprocess import ImagePreprocessor
-from src.inference.predictor import Predictor
+from fastapi import APIRouter, File, Request, UploadFile
+
 from src.inference.postprocess import PostProcessor
+from src.inference.predictor import Predictor
+from src.inference.preprocess import ImagePreprocessor
 
 router = APIRouter()
 
 preprocess = ImagePreprocessor()
 postprocess = PostProcessor()
 
-@router.get("/health")
 
+@router.get("/health")
 def health():
 
-    return {
+    return {"status": "healthy", "model": "loaded", "device": "cpu", "version": "1.0.0"}
 
-        "status":"healthy",
-
-        "model":"loaded",
-
-        "device":"cpu",
-
-        "version":"1.0.0"
-
-    }
 
 @router.post("/predict")
-async def predict(
-    request: Request,
-    file: UploadFile = File(...)
-):
+async def predict(request: Request, file: UploadFile = File(...)):
 
     suffix = os.path.splitext(file.filename)[1]
 
@@ -52,9 +37,7 @@ async def predict(
 
     predictor = Predictor(
         request.app.state.model,
-        request.app.state.model.device
-        if hasattr(request.app.state.model, "device")
-        else "cpu",
+        request.app.state.model.device if hasattr(request.app.state.model, "device") else "cpu",
     )
 
     prediction = predictor.predict(image)

@@ -6,7 +6,6 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from src.rag.settings import KNOWLEDGE_DIR
 from src.rag.vectorstore import db
 
-
 splitter = RecursiveCharacterTextSplitter(
     chunk_size=1000,
     chunk_overlap=200,
