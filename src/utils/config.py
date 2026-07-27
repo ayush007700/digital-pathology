@@ -18,5 +18,24 @@ class Config:
 
         return value
 
+    def get_path(self, key):
+
+        return self.config["paths"][key]
+
+
+    def get_model(self, key):
+
+        return self.config["model"][key]
+
+
+    def get_training(self, key):
+
+        return self.config["training"][key]
+
+
+    def get_deployment(self, key):
+
+        return self.config["deployment"][key]
+
 
 config = Config()

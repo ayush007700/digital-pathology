@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  pathology-api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - ../outputs:/app/outputs
+      - ../logs:/app/logs
+      - ../checkpoints:/app/checkpoints
+
+    env_file:
+      - ../.env
+
+    restart: unless-stopped

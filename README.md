@@ -21,3 +21,32 @@ Production-ready AI system for histopathology image analysis.
 - LangGraph
 - Docker
 - AWS
+
+Run
+uvicorn src.api.app:app --reload
+
+Open
+
+http://127.0.0.1:8000/docs
+
+Build
+
+docker build -t pathology-copilot .
+
+Run
+
+docker run -p 8000:8000 pathology-copilot
+
+Rebuild the Docker image
+
+Since requirements changed, you must rebuild.
+
+docker compose -f docker/docker-compose.yml down
+
+Then
+
+docker compose -f docker/docker-compose.yml build --no-cache
+
+Then
+
+docker compose -f docker/docker-compose.yml up

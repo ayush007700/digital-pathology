@@ -15,6 +15,21 @@ router = APIRouter()
 preprocess = ImagePreprocessor()
 postprocess = PostProcessor()
 
+@router.get("/health")
+
+def health():
+
+    return {
+
+        "status":"healthy",
+
+        "model":"loaded",
+
+        "device":"cpu",
+
+        "version":"1.0.0"
+
+    }
 
 @router.post("/predict")
 async def predict(

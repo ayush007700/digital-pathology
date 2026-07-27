@@ -8,6 +8,13 @@ paths:
   subset_data: data/subset
   logs: logs
 
+  checkpoints: checkpoints
+  outputs: outputs
+
+  overlays: outputs/overlays
+  heatmaps: outputs/heatmaps
+  predictions: outputs/predictions
+
 dataset:
   image_size: 96
   batch_size: 4
@@ -59,10 +66,23 @@ training:
 model:
   name: resnet18
   num_classes: 2
+  pretrained: true
+  checkpoint: checkpoints/best_model.pth
+
+inference:
+  confidence_threshold: 0.5
 
 scheduler:
   step_size: 5
   gamma: 0.1
+
+deployment:
+  host: 0.0.0.0
+  port: 8000
+
+logging:
+  level: INFO
+  file: logs/app.log
 
 # project:
 #   name: Digital Pathology Copilot
