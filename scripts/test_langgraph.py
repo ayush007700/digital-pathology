@@ -16,13 +16,10 @@ for q in questions:
     print("QUESTION:", q)
 
     result = graph.invoke(
-
         {
-
             "question": q,
-
-        }
-
+        },
+        config={"configurable": {"thread_id": f"test-{q}"}},
     )
 
     print()

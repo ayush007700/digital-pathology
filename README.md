@@ -50,3 +50,30 @@ docker compose -f docker/docker-compose.yml build --no-cache
 Then
 
 docker compose -f docker/docker-compose.yml up
+
+Final Architecture:
+
+                 Histopathology Image
+                         │
+                  Preprocess Image
+                         │
+                  ResNet18 / ViT
+                         │
+        ┌────────────────┴────────────────┐
+        ▼                                 ▼
+ Prediction + Confidence              GradCAM
+        │                                 │
+        └────────────────┬────────────────┘
+                         ▼
+                 LangGraph Supervisor
+        ┌───────────────┼─────────────────┐
+        ▼               ▼                 ▼
+   Retriever       PubMed Tool      General Agent
+        │               │                 │
+        └───────────────┴─────────────────┘
+                         ▼
+                 Pathology Agent
+                         ▼
+               Clinical Report Agent
+                         ▼
+                 Markdown/PDF Report
