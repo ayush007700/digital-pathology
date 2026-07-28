@@ -24,30 +24,17 @@ import uuid
 class DigitalPathologyPipeline:
 
     def __init__(
-
         self,
-
-        model,
-
-        device,
-
+        preprocess,
+        model_service,
+        explainability_service,
+        rag_service,
     ):
 
-        self.device = device
-
-        self.predictor = Predictor(
-            model,
-            device,
-        )
-
-        self.preprocess = ImagePreprocessor()
-
-        self.postprocess = PostProcessor()
-
-        self.gradcam = GradCAM(
-            model,
-            model.model.layer4[-1],
-        )
+        self.preprocess = preprocess
+        self.model_service = model_service
+        self.explainability_service = explainability_service
+        self.rag_service = rag_service
 
     def run(
 

@@ -9,11 +9,11 @@ router = APIRouter()
 
 
 @router.get("/health")
-def health():
+async def health():
+
     return {
         "status": "healthy",
-        "model": "loaded",
-        "device": "cpu",
+        "pipeline": "loaded",
         "version": "1.0.0",
     }
 
