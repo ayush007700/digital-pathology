@@ -4,14 +4,39 @@ Production-ready AI system for histopathology image analysis.
 
 ## Features
 
-- Deep Learning
-- Computer Vision
-- Tumor Detection
-- Tumor Segmentation
-- Explainable AI
+- Image Classification
+- Explainability (GradCAM)
+- FastAPI Backend
+- LangGraph Multi-Agent Workflow
 - RAG
-- LLM
-- AWS Deployment
+- GPT-4.1-mini
+- PubMed Tool
+- Clinical Report Generation
+- Docker
+- MLflow
+- TensorBoard
+
+---
+
+## Pipeline
+
+Image
+
+↓
+
+Prediction
+
+↓
+
+GradCAM
+
+↓
+
+LangGraph
+
+↓
+
+Clinical Report
 
 ## Tech Stack
 
@@ -77,3 +102,18 @@ Final Architecture:
                Clinical Report Agent
                          ▼
                  Markdown/PDF Report
+                 
+
+# Performance Benchmark
+
+CPU
+
+Average Prediction Time: 54 ms
+
+Average GradCAM: 111 ms
+
+Average RAG: 8946 ms
+
+Average Report Generation: 1 ms
+
+Total Pipeline: 9112 ms

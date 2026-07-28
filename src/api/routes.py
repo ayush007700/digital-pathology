@@ -3,14 +3,13 @@ import tempfile
 
 from fastapi import APIRouter, File, Request, UploadFile
 
-from src.pipeline.pathology_pipeline import DigitalPathologyPipeline
+from src.pipeline.factory import build_pipeline
 
 router = APIRouter()
 
 
 @router.get("/health")
 async def health():
-
     return {
         "status": "healthy",
         "pipeline": "loaded",
@@ -32,8 +31,8 @@ async def predict(request: Request, file: UploadFile = File(...)):
     try:
         model = request.app.state.model
         device = next(model.parameters()).device
+        pipeline = build_pipeline(model, device)
 
-        pipeline = DigitalPathologyPipeline(model, device)
         result = pipeline.run(
             image_path=image_path,
             clinical_question=(

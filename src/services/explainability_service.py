@@ -25,8 +25,8 @@ class ExplainabilityService:
         image_tensor,
         image_path,
     ):
-
-        cam = self.gradcam.generate(image_tensor)
+        device = next(self.gradcam.model.parameters()).device
+        cam = self.gradcam.generate(image_tensor.to(device))
 
         heatmap = generate_heatmap(cam)
 

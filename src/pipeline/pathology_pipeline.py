@@ -4,21 +4,7 @@ End-to-End Digital Pathology Pipeline
 Author: Ayush Raj
 """
 
-import torch
-
-from src.inference.predictor import Predictor
-from src.inference.preprocess import ImagePreprocessor
-from src.inference.postprocess import PostProcessor
-
-from src.explainability.gradcam import GradCAM
-from src.explainability.heatmap import generate_heatmap
-from src.explainability.overlay import overlay_heatmap
-
-from src.rag.agents.graph import graph
-
-import cv2
-from pathlib import Path
-import uuid
+import time
 
 
 class DigitalPathologyPipeline:
@@ -29,102 +15,59 @@ class DigitalPathologyPipeline:
         model_service,
         explainability_service,
         rag_service,
+        report_service,
     ):
-
         self.preprocess = preprocess
         self.model_service = model_service
         self.explainability_service = explainability_service
         self.rag_service = rag_service
+        self.report_service = report_service
 
-    def run(
+    def run(self, image_path, clinical_question, return_timings: bool = False):
+        timings = {}
 
-        self,
+        t0 = time.perf_counter()
+        image_tensor = self.preprocess(image_path)
+        result = self.model_service.predict(image_tensor)
+        timings["prediction_ms"] = (time.perf_counter() - t0) * 1000
 
-        image_path,
+        t0 = time.perf_counter()
+        overlay_path = self.explainability_service.explain(
+            image_tensor,
+            image_path,
+        )
+        timings["gradcam_ms"] = (time.perf_counter() - t0) * 1000
 
-        clinical_question,
+        t0 = time.perf_counter()
+        state = self.rag_service.ask(
+            question=clinical_question,
+            prediction=result["prediction"],
+            confidence=result["confidence"],
+        )
+        timings["rag_ms"] = (time.perf_counter() - t0) * 1000
 
-    ):
+        t0 = time.perf_counter()
+        report_path = self.report_service.generate(
+            prediction=result["prediction"],
+            confidence=result["confidence"],
+            llm_answer=state.get("answer", ""),
+        )
+        timings["report_ms"] = (time.perf_counter() - t0) * 1000
 
-        image_tensor = self.preprocess(
-            image_path
+        timings["total_ms"] = (
+            timings["prediction_ms"]
+            + timings["gradcam_ms"]
+            + timings["rag_ms"]
+            + timings["report_ms"]
         )
 
-        prediction = self.predictor.predict(
-            image_tensor
-        )
-
-        result = self.postprocess(
-            prediction
-        )
-
-        image_tensor = image_tensor.to(
-            self.device
-        )
-
-        cam = self.gradcam.generate(
-            image_tensor
-        )
-
-        heatmap = generate_heatmap(cam)
-
-        original = cv2.imread(image_path)
-
-        original = cv2.resize(
-            original,
-            (96,96),
-        )
-
-        overlay = overlay_heatmap(
-            original / 255,
-            heatmap,
-        )
-
-        Path(
-            "outputs/overlays"
-        ).mkdir(
-            parents=True,
-            exist_ok=True,
-        )
-
-        filename = f"{uuid.uuid4()}.png"
-
-        overlay_path = (
-            Path("outputs/overlays")
-            / filename
-        )
-
-        cv2.imwrite(
-            str(overlay_path),
-            overlay,
-        )
-
-        thread_id = str(uuid.uuid4())
-
-        state = graph.invoke(
-            {
-                "question": clinical_question,
-                "prediction": result["prediction"],
-                "confidence": result["confidence"],
-            },
-            config={"configurable": {"thread_id": thread_id}},
-        )
-
-        return {
-
-            "prediction":
-                result["prediction"],
-
-            "confidence":
-                result["confidence"],
-
-            "probabilities":
-                result["probabilities"],
-
-            "overlay":
-                str(overlay_path),
-
-            "report":
-                state["report_path"],
-
+        output = {
+            "prediction": result["prediction"],
+            "confidence": result["confidence"],
+            "probabilities": result["probabilities"],
+            "overlay": overlay_path,
+            "report": report_path,
         }
+        if return_timings:
+            output["timings"] = timings
+        return output

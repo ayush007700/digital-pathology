@@ -2,6 +2,8 @@
 RAG Service
 """
 
+import uuid
+
 from src.rag.agents.graph import graph
 
 
@@ -13,15 +15,15 @@ class RagService:
         prediction,
         confidence,
     ):
-
-        state = graph.invoke(
-
+        return graph.invoke(
             {
                 "question": question,
                 "prediction": prediction,
                 "confidence": confidence,
-            }
-
+            },
+            config={
+                "configurable": {
+                    "thread_id": str(uuid.uuid4()),
+                }
+            },
         )
-
-        return state
